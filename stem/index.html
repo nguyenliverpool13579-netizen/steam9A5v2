@@ -1,0 +1,1019 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công Cụ Hỗ Trợ Được - STEM Teacher Hub</title>
+    <link rel="icon" type="image/x-icon" href="images (2).jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700;900&display=swap');
+
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --primary: #4F46E5;
+            /* Indigo for education */
+            --secondary: #10B981;
+            /* Emerald for growth */
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #ffffff;
+            color: #1f2937;
+            overflow-x: hidden;
+            /* Light educational background */
+            background-image: radial-gradient(circle at 15% 50%, rgba(79, 70, 229, 0.05), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.05), transparent 25%);
+        }
+
+        /* Tinh chỉnh thanh cuộn */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--primary), var(--secondary));
+            border-radius: 10px;
+        }
+
+        /* Hiệu ứng Glass Morphism */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Sidebar Animation */
+        .sidebar {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(249, 250, 251, 0.95) 100%);
+            border-right: 1px solid rgba(79, 70, 229, 0.1);
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .sidebar.collapsed .nav-text {
+            display: none;
+        }
+
+        .sidebar.collapsed .submenu {
+            display: none;
+        }
+
+        .nav-item {
+            position: relative;
+            transition: 0.3s;
+            overflow: hidden;
+            border-radius: 8px;
+            margin: 4px 8px;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            transform: scaleY(0);
+            transition: 0.3s;
+            transform-origin: bottom;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .nav-item:hover::before,
+        .nav-item.active::before {
+            transform: scaleY(1);
+        }
+
+        .nav-item:hover {
+            background: rgba(79, 70, 229, 0.1);
+            padding-left: 1.5rem;
+            color: #1f2937;
+            transform: translateX(4px);
+        }
+
+        .nav-item.active {
+            background: rgba(79, 70, 229, 0.15);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: rgba(79, 70, 229, 0.05);
+            border-radius: 8px;
+            margin: 4px 8px;
+        }
+
+        .submenu.show {
+            max-height: 200px;
+        }
+
+        .submenu-item {
+            padding: 8px 16px;
+            color: #6b7280;
+            text-decoration: none;
+            display: block;
+            transition: 0.2s;
+            border-radius: 4px;
+            margin: 2px 4px;
+        }
+
+        .submenu-item:hover {
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary);
+        }
+
+        .submenu-item[target="_blank"]:hover {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(16, 185, 129, 0.1));
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.2);
+        }
+
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+
+        /* Video Card 3D Hover */
+        .anime-card {
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.5s;
+        }
+
+        .anime-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 50%);
+            opacity: 0.8;
+            transition: 0.3s;
+        }
+
+        .anime-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(79, 70, 229, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            z-index: 10;
+        }
+
+        .anime-card img {
+            transition: 0.7s;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .anime-card:hover img {
+            transform: scale(1.1);
+            filter: brightness(0.7);
+        }
+
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            opacity: 0;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 20;
+        }
+
+        .anime-card:hover .play-btn {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Logo Animation */
+        .logo-glow {
+            animation: logoGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            from { box-shadow: 0_0_10px_rgba(79,70,229,0.3); }
+            to { box-shadow: 0_0_20px_rgba(79,70,229,0.6); }
+        }
+
+        /* Hero Background Enhancement */
+        .hero-bg {
+            filter: brightness(0.9) contrast(1.1);
+        }
+
+        /* Hero Banner Animation */
+        .hero-banner {
+            animation: bgPan 20s linear infinite alternate;
+            background-size: 150%;
+        }
+
+        @keyframes bgPan {
+            0% {
+                background-position: left center;
+            }
+
+            100% {
+                background-position: right center;
+            }
+        }
+
+        /* Chat Box Animations */
+        #chat-wrapper {
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .chat-msg {
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+        }
+
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            background: #a855f7;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1);
+            }
+        }
+
+        /* Admin Dashboard Override */
+        #admin-panel {
+            backdrop-filter: blur(20px);
+            transition: 0.4s;
+        }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden">
+
+    <script>
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) window.location.href = 'modau.html';
+    </script>
+
+    <aside id="sidebar" class="w-64 glass-panel h-full flex flex-col z-50 border-r border-gray-200 relative sidebar">
+        <div class="p-6 flex items-center gap-4">
+            <button onclick="toggleSidebar()" class="absolute top-4 right-4 text-gray-600 hover:text-indigo-600 transition">
+                <i class="fas fa-bars"></i>
+            </button>
+            <!-- LOGO WEBSITE -->
+            <div class="flex items-center gap-3">
+                <img src="images (2).jpg" alt="STEM Logo" class="w-10 h-10 rounded-lg object-cover border-2 border-indigo-500 shadow-[0_0_10px_rgba(79,70,229,0.3)]">
+                <div class="text-left">
+                    <h3 class="font-black text-lg tracking-tight text-indigo-600">STEM</h3>
+                    <p class="text-[8px] text-gray-500 uppercase tracking-wider font-bold">Teacher Hub</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-4 space-y-2 mt-4 overflow-y-auto">
+            <a href="#"
+                class="nav-item active flex items-center gap-4 p-3 rounded-lg text-indigo-600 font-bold"><i
+                    class="fas fa-home w-5"></i> <span class="nav-text">Trang Chủ</span></a>
+            <div class="nav-item">
+                <a href="#" onclick="toggleSubmenu('tools')" class="flex items-center gap-4 p-3 rounded-lg text-gray-600 font-bold w-full text-left">
+                    <i class="fas fa-magic w-5"></i> <span class="nav-text">Công Cụ AI & Giáo Dục</span> <i class="fas fa-chevron-down ml-auto transition transform" id="tools-icon"></i>
+                </a>
+                <div class="submenu" id="tools-submenu">
+                    <div class="px-4 py-2 text-xs font-bold text-purple-600 uppercase tracking-wider">🎨 AI Tạo PPT</div>
+                    <a href="https://gamma.app" target="_blank" class="submenu-item flex items-center gap-2">
+                        <i class="fas fa-rocket text-xs text-purple-500"></i> Gamma AI
+                    </a>
+                    <a href="https://www.beautiful.ai" target="_blank" class="submenu-item flex items-center gap-2">
+                        <i class="fas fa-palette text-xs text-pink-500"></i> Beautiful.ai
+                    </a>
+                    <a href="https://tome.app" target="_blank" class="submenu-item flex items-center gap-2">
+                        <i class="fas fa-book-open text-xs text-blue-500"></i> Tome.ai
+                    </a>
+                    <a href="https://www.canva.com" target="_blank" class="submenu-item flex items-center gap-2">
+                        <i class="fas fa-images text-xs text-green-500"></i> Canva AI
+                    </a>
+                    <a href="https://copilot.microsoft.com" target="_blank" class="submenu-item flex items-center gap-2">
+                        <i class="fas fa-robot text-xs text-orange-500"></i> Copilot PPT
+                    </a>
+                    <div class="px-4 py-1 text-xs font-bold text-emerald-600 uppercase tracking-wider">🏫 Dịch Vụ Giáo Dục</div>
+                    <a href="https://classroom.google.com" target="_blank" class="submenu-item flex items-center gap-2">
+                        <i class="fas fa-chalkboard text-xs text-red-500"></i> Google Classroom
+                    </a>
+                    <a href="https://teams.microsoft.com" target="_blank" class="submenu-item flex items-center gap-2">
+                        <i class="fas fa-users text-xs text-blue-600"></i> Teams Education
+                    </a>
+                    <a href="https://www.khanacademy.org" target="_blank" class="submenu-item flex items-center gap-2">
+                        <i class="fas fa-graduation-cap text-xs text-green-600"></i> Khan Academy
+                    </a>
+                    <a href="https://www.coursera.org" target="_blank" class="submenu-item flex items-center gap-2">
+                        <i class="fas fa-university text-xs text-indigo-500"></i> Coursera
+                    </a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <a href="#" onclick="toggleSubmenu('explore')" class="flex items-center gap-4 p-3 rounded-lg text-gray-600 font-bold w-full text-left">
+                    <i class="fas fa-compass w-5"></i> <span class="nav-text">Khám Phá Học Tập</span> <i class="fas fa-chevron-down ml-auto transition transform" id="explore-icon"></i>
+                </a>
+                <div class="submenu" id="explore-submenu">
+                    <div class="px-4 py-2 text-xs font-bold text-indigo-600 uppercase tracking-wider">📚 Nguồn Học Tập Lớp 6-9</div>
+                    <a href="https://hoc10.vn" target="_blank" class="submenu-item flex items-center gap-2">
+                        <i class="fas fa-graduation-cap text-xs text-blue-500"></i> Hoc10.vn
+                    </a>
+                    <a href="https://tailieu.vn" target="_blank" class="submenu-item flex items-center gap-2">
+                        <i class="fas fa-book text-xs text-green-500"></i> Tài Liệu VN
+                    </a>
+                    <a href="https://hocmai.vn" target="_blank" class="submenu-item flex items-center gap-2">
+                        <i class="fas fa-chalkboard-teacher text-xs text-purple-500"></i> HocMai.vn
+                    </a>
+                    <a href="https://khoahoc.tv" target="_blank" class="submenu-item flex items-center gap-2">
+                        <i class="fas fa-microscope text-xs text-red-500"></i> Khoa Học TV
+                    </a>
+                    <a href="https://vietjack.com" target="_blank" class="submenu-item flex items-center gap-2">
+                        <i class="fas fa-brain text-xs text-orange-500"></i> VietJack
+                    </a>
+                    <div class="px-4 py-1 text-xs font-bold text-emerald-600 uppercase tracking-wider">🏫 Nội Bộ</div>
+                    <a href="baigiang.html" class="submenu-item">Bài Giảng Hữu Ích</a>
+                    <a href="tranhhoc10.html" class="submenu-item">Tranh Học 10</a>
+                    <a href="#" class="submenu-item">Tài Liệu Giáo Dục</a>
+                </div>
+            </div>
+            <a href="#" onclick="openUpload()"
+                class="nav-item flex items-center gap-4 p-3 rounded-lg text-gray-600 font-bold"><i
+                    class="fas fa-cloud-upload-alt w-5"></i> <span class="nav-text">Đăng Tải video giảng dạy</span></a>
+            <div class="my-4 border-t border-gray-200"></div>
+            <a href="#" id="admin-btn" onclick="openAdmin()"
+                class="hidden nav-item flex items-center gap-4 p-3 rounded-lg text-red-600 font-bold"><i
+                    class="fas fa-user-shield w-5"></i> <span class="nav-text">Admin Panel</span></a>
+        </nav>
+
+        <div class="p-6 border-t border-gray-200">
+            <button onclick="logout()"
+                class="w-full py-2 rounded-lg border border-gray-300 text-gray-600 hover:text-gray-900 hover:border-gray-900 hover:bg-gray-50 transition font-bold text-sm">
+                <i class="fas fa-sign-out-alt mr-2"></i> ÄÄƒng Xuáº¥t
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 h-full overflow-y-auto relative pb-20">
+
+
+        <header
+            class="sticky top-0 z-40 glass-panel px-8 py-4 border-b border-white/5 flex justify-between items-center">
+            <div class="relative w-96 group">
+                <i
+                    class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-indigo-600 transition"></i>
+                <input type="text" id="search-input" placeholder="Tìm bài giảng, học sinh, tài liệu..." class=" w-full bg-white/5 border border-gray-200 rounded-2xl py-2 pl-12 pr-4 outline-none
+                    focus:border-indigo-600 focus:bg-white/10 transition text-sm">
+                <div id="search-suggestions" class="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-2xl shadow-lg mt-1 hidden z-50 transition-all duration-200">
+                    <div class="p-2">
+                        <p class="text-xs font-bold text-gray-600 mb-2">Trang web hỗ trợ giáo dục:</p>
+                        <a href="https://gamma.app" target="_blank" class="block px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-lg">🎨 Gamma AI - Tạo PPT</a>
+                        <a href="https://www.beautiful.ai" target="_blank" class="block px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-lg">🎨 Beautiful.ai - Tạo PPT</a>
+                        <a href="https://tome.app" target="_blank" class="block px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-lg">🎨 Tome.ai - Tạo PPT</a>
+                        <a href="https://www.canva.com" target="_blank" class="block px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-lg">🎨 Canva AI - Tạo PPT</a>
+                        <a href="https://copilot.microsoft.com" target="_blank" class="block px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-lg">🤖 Copilot PPT</a>
+                        <a href="https://classroom.google.com" target="_blank" class="block px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-lg">🏫 Google Classroom</a>
+                        <a href="https://teams.microsoft.com" target="_blank" class="block px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-lg">👥 Teams Education</a>
+                        <a href="https://www.khanacademy.org" target="_blank" class="block px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-lg">🎓 Khan Academy</a>
+                        <a href="https://www.coursera.org" target="_blank" class="block px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-lg">🎓 Coursera</a>
+                        <a href="https://hoc10.vn" target="_blank" class="block px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-lg">📚 Hoc10.vn</a>
+                        <a href="https://tailieu.vn" target="_blank" class="block px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-lg">📚 Tài Liệu VN</a>
+                        <a href="https://hocmai.vn" target="_blank" class="block px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-lg">📚 HocMai.vn</a>
+                        <a href="https://khoahoc.tv" target="_blank" class="block px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-lg">🔬 Khoa Học TV</a>
+                        <a href="https://vietjack.com" target="_blank" class="block px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-lg">🧠 VietJack</a>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="text-right hidden md:block">
+                    <p class="text-sm font-bold text-gray-900" id="top-email">user@mail.com</p>
+                    <p class="text-[10px] text-green-600 flex items-center justify-end gap-1"><i
+                            class="fas fa-wifi"></i> Online <span id="online-counter">1,204</span></p>
+                </div>
+                <button
+                    class="w-10 h-10 rounded-xl bg-white/5 border border-gray-200 flex items-center justify-center hover:bg-indigo-600/20 hover:text-indigo-600 transition relative">
+                    <i class="fas fa-bell"></i>
+                    <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
+                    <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                </button>
+            </div>
+        </header>
+
+
+        <div class="p-8">
+
+            <!-- HERO BANNER FIXED -->
+            <div class="relative w-full h-[420px] rounded-[30px] overflow-hidden shadow-2xl border border-white/10">
+
+                <!-- áº¢NH Ná»€N -->
+                <img src="images (1).jpg" class="absolute inset-0 w-full h-full object-cover object-center hero-bg">
+
+                <!-- Lá»šP PHá»¦ Tá»I -->
+                <div class="absolute inset-0 bg-gradient-to-r from-white/80 via-white/60 to-white/30"></div>
+
+                <!-- LOGO Lớn Trên Hero -->
+                <div class="absolute top-8 left-8 z-20">
+                    <div class="flex items-center gap-4 bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-white/20">
+                        <img src="images (2).jpg" alt="STEM Logo" class="w-16 h-16 rounded-xl object-cover border-2 border-indigo-500">
+                        <div>
+                            <h3 class="font-black text-2xl text-indigo-600">STEM</h3>
+                            <p class="text-sm text-gray-600 font-medium">Teacher Support Hub</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONTENT -->
+                <div class="relative z-10 h-full flex flex-col justify-center p-12 ml-auto max-w-2xl">
+
+                    <span
+                        class="px-3 py-1 bg-gradient-to-r from-indigo-600 to-emerald-600 rounded-lg text-[10px] font-bold w-fit mb-4 uppercase tracking-wider shadow-[0_0_15px_rgba(79,70,229,0.3)] text-white">
+                        🚀 Hệ thống hỗ trợ giáo viên
+                    </span>
+
+                    <h1 class="text-5xl md:text-6xl font-black text-gray-900 mb-4 leading-tight">
+                        Teacher <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-emerald-600">
+                            Support System
+                        </span>
+                    </h1>
+
+                    <p class="text-gray-700 max-w-lg text-base mb-8 leading-relaxed font-medium">
+                        Nền tảng toàn diện giúp giáo viên STEM quản lý lớp học, tạo bài giảng tương tác,
+                        và hỗ trợ học sinh học tập hiệu quả với công nghệ AI tiên tiến.
+                    </p>
+
+                    <div class="flex gap-4">
+                        <button class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-emerald-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+                            <i class="fas fa-play mr-2"></i> Khám phá ngay
+                        </button>
+                        <button class="px-6 py-3 border-2 border-indigo-600 text-indigo-600 font-bold rounded-xl hover:bg-indigo-600 hover:text-white transition-all">
+                            <i class="fas fa-info-circle mr-2"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SECTION GIá»šI THIá»†U -->
+            <div class="mt-12 bg-gradient-to-r from-indigo-50 to-emerald-50 rounded-3xl p-8 border border-indigo-100">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h2 class="text-3xl font-black text-gray-900 mb-4">
+                            🌟 Chào mừng đến với <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-emerald-600">STEM Teacher Hub</span>
+                        </h2>
+                        <p class="text-gray-700 mb-6 leading-relaxed">
+                            Nền tảng công nghệ tiên tiến dành riêng cho giáo viên STEM, giúp bạn tạo ra những bài giảng tương tác,
+                            quản lý lớp học hiệu quả và hỗ trợ học sinh phát triển tư duy khoa học.
+                        </p>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium">🤖 AI Hỗ trợ</span>
+                            <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium">📊 Phân tích dữ liệu</span>
+                            <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">🎯 Cá nhân hóa</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <img src="táº£i xuá»‘ng.jpg" alt="STEM Education" class="w-80 h-60 object-cover rounded-2xl shadow-xl border-4 border-white mx-auto">
+                        <p class="text-sm text-gray-600 mt-4 italic">Công nghệ giáo dục thế hệ mới</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CÔNG CỤ GIÁO DỤC CẦN THIẾT -->
+            <section class="px-8 mb-12">
+                <div class="flex justify-between items-end mb-8">
+                    <div>
+                        <h2 class="text-3xl font-black text-gray-900 flex items-center gap-3">
+                            <i class="fas fa-tools text-indigo-600"></i> Công Cụ Giáo Dục
+                        </h2>
+                        <p class="text-gray-700 mt-2">Các công cụ thiết yếu cho giáo viên STEM hiện đại</p>
+                    </div>
+                    <a href="#" class="text-indigo-600 font-bold hover:text-indigo-700 flex items-center gap-2">
+                        Xem tất cả <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    <!-- QUIZ CREATOR -->
+                    <div class="glass-panel p-6 rounded-2xl hover:shadow-xl transition-all transform hover:scale-105 cursor-pointer group">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white text-xl">
+                                <i class="fas fa-question-circle"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-900">Quiz Creator</h3>
+                                <p class="text-sm text-gray-600">Tạo bài kiểm tra tương tác</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 text-sm mb-4">Thiết kế quiz với nhiều dạng câu hỏi, tự động chấm điểm và phân tích kết quả học sinh.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">AI Powered</span>
+                            <button class="text-indigo-600 font-medium text-sm hover:text-indigo-700">Sử dụng →</button>
+                        </div>
+                    </div>
+
+                    <!-- LESSON PLANNER -->
+                    <div class="glass-panel p-6 rounded-2xl hover:shadow-xl transition-all transform hover:scale-105 cursor-pointer group">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center text-white text-xl">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-900">Lesson Planner</h3>
+                                <p class="text-sm text-gray-600">Lập kế hoạch bài giảng</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 text-sm mb-4">Tạo kế hoạch bài giảng chi tiết với mục tiêu, hoạt động và tài liệu hỗ trợ.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Smart Template</span>
+                            <button class="text-indigo-600 font-medium text-sm hover:text-indigo-700">Sử dụng →</button>
+                        </div>
+                    </div>
+
+                    <!-- GRADE BOOK -->
+                    <div class="glass-panel p-6 rounded-2xl hover:shadow-xl transition-all transform hover:scale-105 cursor-pointer group">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center text-white text-xl">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-900">Grade Book</h3>
+                                <p class="text-sm text-gray-600">Quản lý điểm số</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 text-sm mb-4">Theo dõi điểm số, tạo báo cáo và phân tích tiến bộ của học sinh.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">Analytics</span>
+                            <button class="text-indigo-600 font-medium text-sm hover:text-indigo-700">Sử dụng →</button>
+                        </div>
+                    </div>
+
+                    <!-- INTERACTIVE WHITEBOARD -->
+                    <div class="glass-panel p-6 rounded-2xl hover:shadow-xl transition-all transform hover:scale-105 cursor-pointer group">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center text-white text-xl">
+                                <i class="fas fa-chalkboard"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-900">Interactive Board</h3>
+                                <p class="text-sm text-gray-600">Bảng tương tác</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 text-sm mb-4">Vẽ, viết và trình bày nội dung tương tác với học sinh.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full">Touch Ready</span>
+                            <button class="text-indigo-600 font-medium text-sm hover:text-indigo-700">Sử dụng →</button>
+                        </div>
+                    </div>
+
+                    <!-- STUDENT PORTFOLIO -->
+                    <div class="glass-panel p-6 rounded-2xl hover:shadow-xl transition-all transform hover:scale-105 cursor-pointer group">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-teal-500 to-blue-500 rounded-xl flex items-center justify-center text-white text-xl">
+                                <i class="fas fa-portrait"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-900">Student Portfolio</h3>
+                                <p class="text-sm text-gray-600">Há»“ sÆ¡ há»c sinh</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 text-sm mb-4">Tạo và quản lý portfolio học sinh với các dự án và thành tích.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded-full">Digital Portfolio</span>
+                            <button class="text-indigo-600 font-medium text-sm hover:text-indigo-700">Sử dụng →</button>
+                        </div>
+                    </div>
+
+                    <!-- PARENT COMMUNICATOR -->
+                    <div class="glass-panel p-6 rounded-2xl hover:shadow-xl transition-all transform hover:scale-105 cursor-pointer group">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-500 rounded-xl flex items-center justify-center text-white text-xl">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-900">Parent Connect</h3>
+                                <p class="text-sm text-gray-600">Liên lạc phụ huynh</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 text-sm mb-4">Gửi thông báo, báo cáo tiến độ và liên lạc với phụ huynh.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs bg-pink-100 text-pink-700 px-2 py-1 rounded-full">Auto Messaging</span>
+                            <button class="text-indigo-600 font-medium text-sm hover:text-indigo-700">Sử dụng →</button>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- AI Há»– TRá»¢ GIáº¢NG Dáº Y -->
+            <section class="px-8 mb-12">
+                <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-3xl p-8 border border-indigo-100">
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-black text-gray-900 mb-4">
+                            🤖 AI Hỗ Trợ Giảng Dạy
+                        </h2>
+                        <p class="text-gray-700 max-w-2xl mx-auto">
+                            Công nghệ trí tuệ nhân tạo tiên tiến giúp giáo viên tạo nội dung, phân tích dữ liệu và cá nhân hóa việc học
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-6">
+
+                        <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all">
+                            <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center text-white text-xl mb-4">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h3 class="font-bold text-lg text-gray-900 mb-2">AI Lesson Generator</h3>
+                            <p class="text-gray-700 text-sm mb-4">Tự động tạo bài giảng từ chủ đề, bao gồm nội dung, hoạt động và tài liệu.</p>
+                            <button class="w-full bg-indigo-600 text-white py-2 rounded-lg font-medium hover:bg-indigo-700 transition">
+                                Tạo bài giảng
+                            </button>
+                        </div>
+
+                        <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all">
+                            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center text-white text-xl mb-4">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <h3 class="font-bold text-lg text-gray-900 mb-2">Learning Analytics</h3>
+                            <p class="text-gray-700 text-sm mb-4">Phân tích dữ liệu học tập, dự đoán khó khăn và đề xuất phương pháp.</p>
+                            <button class="w-full bg-emerald-600 text-white py-2 rounded-lg font-medium hover:bg-emerald-700 transition">
+                                Xem báo cáo
+                            </button>
+                        </div>
+
+                        <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all">
+                            <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white text-xl mb-4">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <h3 class="font-bold text-lg text-gray-900 mb-2">Personalized Learning</h3>
+                            <p class="text-gray-700 text-sm mb-4">Tạo lộ trình học tập cá nhân hóa dựa trên khả năng của từng học sinh.</p>
+                            <button class="w-full bg-purple-600 text-white py-2 rounded-lg font-medium hover:bg-purple-700 transition">
+                                Tùy chỉnh
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- THÔNG BÁO & CẬP NHẬT -->
+            <section class="px-8 mb-12">
+                <div class="flex justify-between items-end mb-8">
+                    <div>
+                        <h2 class="text-3xl font-black text-gray-900 flex items-center gap-3">
+                            <i class="fas fa-bell text-emerald-600"></i> Thông Báo & Cập Nhật
+                        </h2>
+                        <p class="text-gray-700 mt-2">Tin tức mới nhất từ hệ thống và cộng đồng giáo viên</p>
+                    </div>
+                    <a href="#" class="text-emerald-600 font-bold hover:text-emerald-700 flex items-center gap-2">
+                        Xem tất cả <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+
+                    <!-- THÔNG BÁO HỆ THỐNG -->
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="w-10 h-10 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center text-white">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-lg text-gray-900 mb-2">Cập nhật phiên bản 2.1</h3>
+                                <p class="text-gray-700 text-sm mb-3">Thêm tính năng AI tạo bài giảng tự động và phân tích học sinh nâng cao.</p>
+                                <div class="flex items-center gap-4 text-xs text-gray-500">
+                                    <span><i class="fas fa-clock mr-1"></i> 2 giờ trước</span>
+                                    <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full">Quan trọng</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="w-full bg-red-600 text-white py-2 rounded-lg font-medium hover:bg-red-700 transition">
+                            Cập nhật ngay
+                        </button>
+                    </div>
+
+                    <!-- TIN TỨC GIÁO DỤC -->
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-white">
+                                <i class="fas fa-newspaper"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-lg text-gray-900 mb-2">Workshop STEM 2026</h3>
+                                <p class="text-gray-700 text-sm mb-3">Đăng ký tham gia workshop "Đổi mới phương pháp giảng dạy STEM" vào tháng 4.</p>
+                                <div class="flex items-center gap-4 text-xs text-gray-500">
+                                    <span><i class="fas fa-clock mr-1"></i> 1 ngày trước</span>
+                                    <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Sự kiện</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition">
+                            Đăng ký tham gia
+                        </button>
+                    </div>
+
+                    <!-- CỘNG ĐỒNG -->
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-lg text-gray-900 mb-2">Bài giảng được chia sẻ</h3>
+                                <p class="text-gray-700 text-sm mb-3">Thầy Nguyễn Văn A vừa chia sẻ bài giảng "Robot cơ bản" với cộng đồng.</p>
+                                <div class="flex items-center gap-4 text-xs text-gray-500">
+                                    <span><i class="fas fa-clock mr-1"></i> 3 giờ trước</span>
+                                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full">Cộng đồng</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="w-full bg-green-600 text-white py-2 rounded-lg font-medium hover:bg-green-700 transition">
+                            Xem bài giảng
+                        </button>
+                    </div>
+
+                    <!-- MẸO HAY -->
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-lg text-gray-900 mb-2">Mẹo giảng dạy STEM</h3>
+                                <p class="text-gray-700 text-sm mb-3">5 cách sử dụng AI để tạo bài tập tương tác hiệu quả cho học sinh.</p>
+                                <div class="flex items-center gap-4 text-xs text-gray-500">
+                                    <span><i class="fas fa-clock mr-1"></i> 5 giờ trước</span>
+                                    <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded-full">Mẹo hay</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="w-full bg-purple-600 text-white py-2 rounded-lg font-medium hover:bg-purple-700 transition">
+                            Đọc ngay
+                        </button>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+</div>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('collapsed');
+    }
+
+    function toggleSubmenu(id) {
+        const submenu = document.getElementById(id + '-submenu');
+        const icon = document.getElementById(id + '-icon');
+        submenu.classList.toggle('show');
+        icon.classList.toggle('rotate-180');
+    }
+
+    function openAdmin() {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser || currentUser.role !== 'admin') {
+            alert('Bạn không có quyền truy cập!');
+            return;
+        }
+        document.getElementById('admin-panel').style.display = 'flex';
+        const list = document.getElementById('admin-users');
+        list.innerHTML = '<div class="text-center py-4">Đang tải...</div>';
+
+        try {
+            list.innerHTML = '';
+            const users = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('user_')) {
+                    const userData = JSON.parse(localStorage.getItem(key));
+                    users.push(userData);
+                }
+            }
+
+            users.forEach((userData) => {
+                const isBanned = userData.isBanned || false;
+
+                const userDiv = document.createElement('div');
+                userDiv.className = "flex justify-between items-center bg-black/50 border border-white/5 p-3 rounded-lg text-sm mb-2 hover:border-indigo-500/50 transition-all";
+
+                userDiv.innerHTML = `
+                    <div class="flex flex-col">
+                        <span class="${userData.role === 'admin' ? 'text-red-400 font-bold' : 'text-gray-200'} ${isBanned ? 'line-through opacity-40' : ''}">
+                            ${userData.email}
+                        </span>
+                        <span class="text-[9px] font-bold ${isBanned ? 'text-red-500' : 'text-green-500'} uppercase tracking-tighter">
+                            ${isBanned ? '● Đã khóa' : '● Đang hoạt động'}
+                        </span>
+                    </div>
+                    <div class="flex gap-2">
+                        ${userData.role !== 'admin' ? `
+                            <button onclick="toggleBan('${userData.email}')" class="px-3 py-1 rounded text-[10px] font-black transition-all ${isBanned ? 'bg-emerald-600 hover:bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'bg-red-600 hover:bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.3)]'}">
+                                ${isBanned ? 'ÂN XÁ' : 'BAN'}
+                            </button>
+                        ` : '<span class="text-[10px] bg-indigo-500/20 text-indigo-400 px-2 py-1 rounded border border-indigo-500/30 font-bold">ADMIN</span>'}
+                    </div>
+                `;
+                list.appendChild(userDiv);
+            });
+        } catch (error) {
+            list.innerHTML = '<div class="text-center py-4 text-red-400">Lỗi tải danh sách</div>';
+            alert('Lỗi tải danh sách users: ' + error.message);
+        }
+    }
+
+    function toggleBan(email) {
+        try {
+            const key = 'user_' + email;
+            let userData = JSON.parse(localStorage.getItem(key));
+
+            if (!userData) {
+                alert('User không tồn tại!');
+                return;
+            }
+
+            if (userData.email === JSON.parse(localStorage.getItem('currentUser')).email) {
+                alert("Không thể tự BAN chính mình!");
+                return;
+            }
+            userData.isBanned = !userData.isBanned;
+            localStorage.setItem(key, JSON.stringify(userData));
+
+            Swal.fire({
+                title: userData.isBanned ? 'Đã thực thi lệnh BAN!' : 'Đã gỡ lệnh cấm!',
+                text: `User ${userData.email} ${userData.isBanned ? 'mày ngu mày chết mẹ mày đi kêu ca cai lòn ' : 'anh bảnh ra rồi .'}`,
+                icon: userData.isBanned ? 'error' : 'success',
+                background: '#09090b',
+                color: '#fff',
+                confirmButtonColor: '#6366f1'
+            });
+
+            openAdmin();
+        } catch (error) {
+            alert('Lỗi ban user: ' + error.message);
+        }
+    }
+
+    function closeAdmin() {
+        document.getElementById('admin-panel').style.display = 'none';
+    }
+
+    function nukeUsers() {
+        Swal.fire({
+            title: 'XÁC NHẬN NUKE?',
+            text: "Tất cả user thường sẽ bị bốc hơi khỏi hệ thống!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'XÓA HẾT!',
+            background: '#09090b',
+            color: '#fff'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                try {
+                    const keysToDelete = [];
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        if (key.startsWith('user_')) {
+                            const userData = JSON.parse(localStorage.getItem(key));
+                            if (userData.role !== 'admin') {
+                                keysToDelete.push(key);
+                            }
+                        }
+                    }
+                    keysToDelete.forEach(key => localStorage.removeItem(key));
+                    openAdmin();
+                    Swal.fire({ title: 'Nuked!', text: 'Hệ thống đã được dọn dẹp.', icon: 'success', background: '#09090b', color: '#fff' });
+                } catch (error) {
+                    alert('Lỗi nuke: ' + error.message);
+                }
+            }
+        });
+    }
+
+    function sendSystemMsg() {
+        const val = document.getElementById('sys-msg-input').value;
+        if (!val) return;
+        document.getElementById('sys-msg-input').value = '';
+    }
+
+    function logout() {
+        if (confirm('Bạn có chắc muốn đăng xuất?')) {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'modau.html';
+        }
+    }
+
+    // Initialize
+    if (!currentUser) window.location.href = 'modau.html';
+
+    // Set user info
+    if (currentUser) {
+        document.getElementById('top-email').innerText = currentUser.email;
+        document.getElementById('user-display-name').innerText = currentUser.name || currentUser.email.split('@')[0];
+        document.getElementById('user-role-text').innerHTML = currentUser.role === 'admin' ?
+            '<span class="text-red-400"><i class="fas fa-crown"></i> Administrator</span>' :
+            '<span class="text-green-400"><i class="fas fa-user"></i> Premium Member</span>';
+    }
+
+    // Online counter
+    setInterval(() => {
+        document.getElementById('online-counter').innerText = (1200 + Math.floor(Math.random() * 50)).toLocaleString();
+    }, 5000);
+
+    // Search suggestions
+    const searchInput = document.getElementById('search-input');
+    const suggestions = document.getElementById('search-suggestions');
+
+    function showSuggestions() {
+        suggestions.classList.remove('hidden');
+    }
+
+    function hideSuggestions() {
+        suggestions.classList.add('hidden');
+    }
+
+    searchInput.addEventListener('focus', showSuggestions);
+
+    document.addEventListener('click', (e) => {
+        if (!searchInput.contains(e.target) && !suggestions.contains(e.target)) {
+            hideSuggestions();
+        }
+    });
+
+    // Hide suggestions when clicking on a link
+    suggestions.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A') {
+            hideSuggestions();
+        }
+    });
+</script>
+
+<div id="admin-panel" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[200] hidden flex items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-3xl">
+        <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+            <h2 class="text-2xl font-black text-gray-900">Admin Panel</h2>
+            <button onclick="closeAdmin()" class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <div class="flex gap-4 mb-6">
+                <button onclick="openAdmin()" class="flex-1 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition">
+                    <i class="fas fa-users mr-2"></i> Quản lý Users
+                </button>
+                <button onclick="nukeUsers()" class="flex-1 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition">
+                    <i class="fas fa-bomb mr-2"></i> Nuke Users
+                </button>
+            </div>
+            <div id="admin-users" class="space-y-3 max-h-96 overflow-y-auto"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+    </main>
